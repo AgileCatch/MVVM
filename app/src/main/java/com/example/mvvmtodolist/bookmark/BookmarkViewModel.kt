@@ -34,18 +34,6 @@ class BookmarkViewModel : ViewModel() {
         bookmarkModel: BookmarkModel,
         position: Int?
     ) {
-        fun findIndex(bookmarkModel: BookmarkModel): Int? {
-            val currentList = list.value?.toMutableList()
-            val findTodoById = currentList?.find { // 수정하고자 하는 todoModel의 id와 currentList의 id를 비교
-                it.id == bookmarkModel.id
-            }
-            return currentList?.indexOf(findTodoById)//indexOf : 찾고자 하는 Array의 index를 반환
-        }
-
-        if (bookmarkModel == null) {
-            return
-        }
-
         val findPosition = position ?: findIndex(bookmarkModel) //position이 안들어왔을 경우 id 값으로
         if (findPosition == null || findPosition < 0) {
             return

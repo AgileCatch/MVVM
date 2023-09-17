@@ -22,7 +22,7 @@ class TodoContentActivity : AppCompatActivity() {
         const val EXTRA_TODO_MODEL = "extra_todo_model"
 
         fun newIntentForAdd(
-            context: Context
+            context: Context,
         ) = Intent(context, TodoContentActivity::class.java).apply {
             putExtra(EXTRA_TODO_ENTRY_TYPE, TodoContentType.ADD.name)
         }
@@ -30,7 +30,7 @@ class TodoContentActivity : AppCompatActivity() {
         fun newIntentForEdit(
             context: Context,
             position: Int,
-            todoModel: TodoModel
+            todoModel: TodoModel,
         ) = Intent(context, TodoContentActivity::class.java).apply {
             putExtra(EXTRA_TODO_ENTRY_TYPE, TodoContentType.EDIT.name)
             putExtra(EXTRA_TODO_POSITION, position)
@@ -49,8 +49,8 @@ class TodoContentActivity : AppCompatActivity() {
         TodoContentType.from(intent.getStringExtra(EXTRA_TODO_ENTRY_TYPE))
     }
 
-    fun test(){
-        when (entryType){
+    fun test() {
+        when (entryType) {
             TodoContentType.ADD -> TODO()
             TodoContentType.EDIT -> TODO()
             TodoContentType.REMOVE -> TODO()
@@ -105,7 +105,7 @@ class TodoContentActivity : AppCompatActivity() {
                 )
                 putExtra(
                     EXTRA_TODO_MODEL,
-                    TodoModel(
+                    todoModel?.copy(
                         title = todoTitle.text.toString(),
                         description = todoDescription.text.toString()
                     )
@@ -130,6 +130,10 @@ class TodoContentActivity : AppCompatActivity() {
                         putExtra(
                             EXTRA_TODO_POSITION,
                             position
+                        )
+                        putExtra(
+                            EXTRA_TODO_MODEL,
+                            todoModel
                         )
                     }
                     setResult(Activity.RESULT_OK, intent)

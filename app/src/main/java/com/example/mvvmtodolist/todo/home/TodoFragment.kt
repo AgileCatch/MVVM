@@ -65,8 +65,10 @@ class TodoFragment : Fragment() {
                         //북마크도 수정될 수 있도록
                         todoModel?.let { modifyToBookmarkTab(it) }
                     }
-
-                    TodoContentType.REMOVE -> removeItemTodoItem(position)
+                    TodoContentType.REMOVE -> {
+                        removeItemTodoItem(position)// todo에서 item 삭제
+                        todoModel?.let { removeItemToBookmarkTab(item = it) } //bookmark꺼 item 삭제
+                    }
                     else -> Unit // nothing
                 }
             }

@@ -106,18 +106,16 @@ class TodoListAdapter(
                 )
             }
             // 북마크 클릭
-            bookmark.setOnCheckedChangeListener { _, isChecked ->
+            bookmark.setOnCheckedChangeListener { view, isChecked ->
                 // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
                 //스위치가 off 상태에서 클릭했을때 만 추가가 되어야함
-                if (item.isBookmark != true) { // 둘이 상태가 다를 경우 상태를 isChecked로 바꾼 item을 copy해와 전송
+                if(view.isPressed){
                     onBookmarkChecked(
                         adapterPosition,
                         item.copy(
-                            isBookmark = isChecked
+                            isBookmark = isChecked // 현재 바인딩된 아이템과 checked 된 값 비교 후 전달
                         )
                     )
-                    item.isBookmark =! item.isBookmark
-                    //클릭이 안되시윛
                 }
             }
 
