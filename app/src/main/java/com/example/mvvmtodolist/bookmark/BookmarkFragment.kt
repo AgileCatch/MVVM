@@ -9,9 +9,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.mvvmtodolist.databinding.BookmarkFragmentBinding
+import com.example.mvvmtodolist.main.BookmarkState
 import com.example.mvvmtodolist.main.MainActivity
+import com.example.mvvmtodolist.main.MainViewModel
 import com.example.mvvmtodolist.todo.content.TodoContentActivity
 
 class BookmarkFragment : Fragment() {
@@ -22,7 +26,8 @@ class BookmarkFragment : Fragment() {
 
     private var _binding: BookmarkFragmentBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : BookmarkViewModel by viewModels()
+    private val viewModel : BookmarkViewModel by viewModels{BookmarkViewModelFactory()}
+    private val sharedViewModel: MainViewModel by activityViewModels()
 
     private val listAdapter by lazy {
         BookmarkListAdapter { position, item ->
@@ -51,6 +56,14 @@ class BookmarkFragment : Fragment() {
         list.observe(viewLifecycleOwner) { // Fragment LV : observe(viewLifecycleOwner)
             listAdapter.submitList(it)
         }
+        //데이터를 관찰해 데이터 수신
+        sharedViewModel.bookmarkState.observe(viewLifecycleOwner, Observer { state ->
+            when(state){
+                is BookmarkState.AddBookmark -> addItem(state.bookmarkModel)
+                is BookmarkState.ModifyBookmark -> modifyItem(state.bookmarkModel)
+                is BookmarkState.RemoveBookmark -> removeItem(state.bookmarkModel)
+            }
+        })
     }
 
     private fun initView() = with(binding) {
@@ -73,6 +86,9 @@ class BookmarkFragment : Fragment() {
         viewModel.addBookmarkItem(item)
     }
 
+    private fun modifyItem(bookmarkModel: BookmarkModel) {
+        viewModel.modifyBookmarkItem(bookmarkModel)
+    }
     private fun modifyItemAtTodoTab(
         item: BookmarkModel
     ) {
